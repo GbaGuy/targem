@@ -1,5 +1,7 @@
 # targem (תרגם)
 
+**[עברית – הוראות התקנה ושימוש](README.he.md)**
+
 Free, open-source on-screen translator for video games, for **Windows** and **Linux** (Wayland/Hyprland).
 Drag a box over the game's text and a Hebrew translation appears on screen. The game keeps focus.
 Works offline too.
