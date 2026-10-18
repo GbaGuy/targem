@@ -1,0 +1,32 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 test_targem.py
+
+  # The Windows front end and installer can only really be checked on Windows.
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: installer parses
+        shell: pwsh
+        run: |
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile("$PWD\install.ps1", [ref]$null, [ref]$errors) | Out-Null
+          if ($errors) { $errors; exit 1 }
+      - run: pip install pillow ctranslate2 sentencepiece
+      - run: python test_targem.py
+      - name: offline model + Hebrew translation
+        run: |
+          python targem.py --setup-offline
+          python -c "import targem; out = targem.translate('Your quest begins in the old castle.', 'iw', offline=True); print(out.encode('unicode_escape')); assert any('֐' <= c <= '׿' for c in out)"
+      - name: Windows UI starts
+        run: python -c "import argparse, targem_win; a = targem_win.App(argparse.Namespace(ocr_lang='eng', to='iw', interval=1000, font_size=None, offline=True)); a.root.after(1500, a.root.destroy); a.root.mainloop(); print('ui ok')"
