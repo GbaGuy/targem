@@ -22,6 +22,15 @@ jobs:
           $errors = $null
           [System.Management.Automation.Language.Parser]::ParseFile("$PWD\install.ps1", [ref]$null, [ref]$errors) | Out-Null
           if ($errors) { $errors; exit 1 }
+      - name: desktop shortcut with the targem icon
+        shell: pwsh
+        run: |
+          $lnk = (New-Object -ComObject WScript.Shell).CreateShortcut("$env:TEMP\targem-test.lnk")
+          $lnk.TargetPath = "pythonw.exe"; $lnk.IconLocation = "$PWD\icon.ico"; $lnk.Save()
+          Add-Type -AssemblyName System.Drawing
+          $icon = [System.Drawing.Icon]::ExtractAssociatedIcon("$PWD\icon.ico")
+          if (-not $icon) { exit 1 }
+          "icon ok: $($icon.Width)x$($icon.Height), shortcut icon = $((New-Object -ComObject WScript.Shell).CreateShortcut("$env:TEMP\targem-test.lnk").IconLocation)"
       - run: pip install pillow ctranslate2 sentencepiece
       - run: python test_targem.py
       - name: offline model + Hebrew translation

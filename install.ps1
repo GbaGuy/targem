@@ -68,6 +68,7 @@ foreach ($path in $links) {
     $lnk.TargetPath = "$dir\.venv\Scripts\pythonw.exe"
     $lnk.Arguments = "`"$dir\targem.py`" --offline"
     $lnk.WorkingDirectory = $dir
+    $lnk.IconLocation = "$dir\icon.ico"
     $lnk.Description = "targem - on-screen Hebrew translator for games"
     $lnk.Save()
 }

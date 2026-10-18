@@ -14,7 +14,7 @@ irm https://raw.githubusercontent.com/GbaGuy/targem/main/install.ps1 | iex
 ```
 
 The installer sets up Python and Tesseract OCR (via winget), targem, and the offline Hebrew model, then
-adds targem to the Start Menu and desktop. To remove it: `install.bat -Uninstall`.
+adds a targem icon to the desktop and Start Menu. To remove it: `install.bat -Uninstall`.
 
 Hotkeys work in-game:
 
