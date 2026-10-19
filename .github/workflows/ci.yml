@@ -64,7 +64,7 @@ jobs:
         shell: pwsh
         run: |
           dotnet tool install --global wix --version 5.0.2
-          wix build targem.wxs -d Version=1.0.${{ github.run_number }} -o targem.msi
+          wix build targem.wxs -arch x64 -d Version=1.0.${{ github.run_number }} -o targem.msi
           Start-Process msiexec -ArgumentList "/i targem.msi /qn /l*v msi.log" -Wait
           foreach ($f in "targem.exe", "tesseract\tesseract.exe", "models\en_he\sentencepiece.model") {
             if (-not (Test-Path "$env:ProgramFiles\targem\$f")) { Get-Content msi.log -Tail 40; throw "missing $f" }

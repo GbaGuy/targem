@@ -1,5 +1,5 @@
 <!-- targem.msi: the PyInstaller build in dist\targem (with Tesseract and the offline model), plus shortcuts.
-     Built by CI:  wix build targem.wxs -d Version=1.0.N -o targem.msi -->
+     Built by CI:  wix build targem.wxs -arch x64 -d Version=1.0.N -o targem.msi -->
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <Package Name="targem" Manufacturer="GbaGuy" Version="$(Version)" UpgradeCode="3f0a207d-6653-4f33-a04c-386864d40a28">
     <MajorUpgrade DowngradeErrorMessage="A newer targem is already installed." />
