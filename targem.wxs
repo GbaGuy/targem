@@ -9,7 +9,7 @@
 
     <StandardDirectory Id="ProgramFiles64Folder">
       <Directory Id="INSTALLFOLDER" Name="targem">
-        <Files Include="dist\targem\**" />
+        <Files Include="$(sys.SOURCEFILEDIR)dist\targem\**" />
       </Directory>
     </StandardDirectory>
 
