@@ -39,3 +39,43 @@ jobs:
           python -c "import targem; out = targem.translate('Your quest begins in the old castle.', 'iw', offline=True); print(out.encode('unicode_escape')); assert any('֐' <= c <= '׿' for c in out)"
       - name: Windows UI starts
         run: python -c "import argparse, targem_win; a = targem_win.App(argparse.Namespace(ocr_lang='eng', to='iw', interval=1000, font_size=None, offline=True)); a.root.after(1500, a.root.destroy); a.root.mainloop(); print('ui ok')"
+
+  # targem.msi: frozen app + Tesseract + offline model. Tag vX.Y to publish it as a release.
+  msi:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow ctranslate2 sentencepiece pyinstaller
+      - run: pyinstaller --noconfirm --noconsole --name targem --icon icon.ico --hidden-import targem_win --collect-binaries ctranslate2 targem.py
+      - name: bundle Tesseract and the offline model
+        shell: pwsh
+        run: |
+          choco install tesseract -y --no-progress
+          Copy-Item -Recurse "$env:ProgramFiles\Tesseract-OCR" dist\targem\tesseract
+          $env:XDG_DATA_HOME = "$env:RUNNER_TEMP\data"
+          python targem.py --setup-offline
+          Move-Item "$env:XDG_DATA_HOME\targem" dist\targem\models
+      - name: build and test-install the MSI
+        shell: pwsh
+        run: |
+          dotnet tool install --global wix --version 5.0.2
+          wix build targem.wxs -d Version=1.0.${{ github.run_number }} -o targem.msi
+          Start-Process msiexec -ArgumentList "/i targem.msi /qn /l*v msi.log" -Wait
+          foreach ($f in "targem.exe", "tesseract\tesseract.exe", "models\en_he\sentencepiece.model") {
+            if (-not (Test-Path "$env:ProgramFiles\targem\$f")) { Get-Content msi.log -Tail 40; throw "missing $f" }
+          }
+          & "$env:ProgramFiles\targem\tesseract\tesseract.exe" --list-langs
+          "msi ok: $((Get-Item targem.msi).Length / 1MB) MB"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: targem-msi
+          path: targem.msi
+      - if: startsWith(github.ref, 'refs/tags/v')
+        run: gh release create ${{ github.ref_name }} targem.msi --title "targem ${{ github.ref_name }}" --notes "Download targem.msi and double-click it."
+        env:
+          GH_TOKEN: ${{ github.token }}

@@ -19,6 +19,8 @@ from pathlib import Path
 LAYER_SHELL = "/usr/lib/libgtk4-layer-shell.so"
 CACHE = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "targem"
 MODELS = Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local" / "share")) / "targem"
+if getattr(sys, "frozen", False):  # the MSI build ships the offline model next to targem.exe
+    MODELS = Path(sys.executable).parent / "models"
 SETTINGS = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "targem" / "settings.json"
 VENV = Path(__file__).resolve().parent / ".venv" / "bin" / "python"  # holds the offline libs, if set up
 

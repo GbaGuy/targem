@@ -1,0 +1,27 @@
+<!-- targem.msi: the PyInstaller build in dist\targem (with Tesseract and the offline model), plus shortcuts.
+     Built by CI:  wix build targem.wxs -d Version=1.0.N -o targem.msi -->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="targem" Manufacturer="GbaGuy" Version="$(Version)" UpgradeCode="3f0a207d-6653-4f33-a04c-386864d40a28">
+    <MajorUpgrade DowngradeErrorMessage="A newer targem is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+    <Icon Id="targem.ico" SourceFile="icon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="targem.ico" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="targem">
+        <Files Include="dist\targem\**" />
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder" />
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Component Id="Shortcuts">
+        <Shortcut Name="targem" Description="On-screen Hebrew translator for games" Target="[INSTALLFOLDER]targem.exe"
+                  Arguments="--offline" WorkingDirectory="INSTALLFOLDER" Icon="targem.ico" />
+        <Shortcut Directory="DesktopFolder" Name="targem" Description="On-screen Hebrew translator for games"
+                  Target="[INSTALLFOLDER]targem.exe" Arguments="--offline" WorkingDirectory="INSTALLFOLDER" Icon="targem.ico" />
+        <RegistryValue Root="HKCU" Key="Software\targem" Name="shortcuts" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
+  </Package>
+</Wix>

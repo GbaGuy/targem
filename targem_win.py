@@ -5,14 +5,17 @@ import io
 import queue
 import shutil
 import subprocess
+import sys
 import threading
 import tkinter as tk
+from pathlib import Path
 
 from PIL import ImageGrab
 
 from targem import CACHE, bump_font, bump_opacity, clean_ocr, font_size, save_settings, settings, translate
 
-TESSERACT = shutil.which("tesseract") or r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+BUNDLED = Path(sys.executable).parent / "tesseract" / "tesseract.exe"  # the MSI build ships its own
+TESSERACT = str(BUNDLED) if BUNDLED.exists() else shutil.which("tesseract") or r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 FG, BG, ACCENT, KEY = "#ffffff", "#000000", "#ffd400", "#ff00ff"  # KEY = transparent colour for the round bubble
 user32 = ctypes.windll.user32
 

@@ -10,14 +10,13 @@
 
 ## התקנה ב-Windows
 
-**הדרך הקלה:**
+**הדרך הקלה:** הורידו את **[targem.msi](https://github.com/GbaGuy/targem/releases/latest/download/targem.msi)**
+ולחצו עליו פעמיים. הכל כבר בפנים (גם מודל התרגום בלי אינטרנט), ולא צריך להתקין שום דבר אחר.
+בסוף מופיע אייקון של targem על שולחן העבודה ובתפריט התחל.
+הסרה: הגדרות ← אפליקציות ← targem ← הסר התקנה.
 
-1. בעמוד הזה, לחצו על הכפתור הירוק **Code** ואז על **Download ZIP**.
-2. חלצו את קובץ ה-ZIP לתיקייה כלשהי.
-3. לחצו פעמיים על **`install.bat`**.
-4. חכו כמה דקות. ההתקנה מורידה את כל מה שצריך.
-
-**או** הדביקו את השורה הזאת ב-PowerShell:
+**דרך נוספת:** לחצו על הכפתור הירוק **Code** ואז **Download ZIP**, חלצו, ולחצו פעמיים על **`install.bat`**.
+או הדביקו את השורה הזאת ב-PowerShell:
 
 <div dir="ltr">
 
@@ -27,10 +26,8 @@ irm https://raw.githubusercontent.com/GbaGuy/targem/main/install.ps1 | iex
 
 </div>
 
-ההתקנה מתקינה לבד את Python ואת Tesseract (התוכנה שקוראת את הטקסט מהמסך), את targem ואת מודל התרגום לעברית
-שעובד בלי אינטרנט. בסוף מופיע אייקון של targem על שולחן העבודה ובתפריט התחל, והתוכנה נפתחת.
-
-**הסרה:** הריצו את `install.bat -Uninstall`.
+הסקריפט מתקין לבד את Python ואת Tesseract (התוכנה שקוראת את הטקסט מהמסך), את targem ואת מודל התרגום.
+הסרה: `install.bat -Uninstall`.
 
 > **חשוב:** הריצו את המשחק במצב **Borderless** או **Windowed** (חלון ללא מסגרת).
 > במצב מסך מלא "בלעדי" (Exclusive Fullscreen), Windows לא מאפשר לשום תוכנה להופיע מעל המשחק.
@@ -155,14 +152,18 @@ Works offline too.
 
 ## Windows
 
-**Easy install:** download this repo (green *Code* button → *Download ZIP*), unzip, double-click **`install.bat`**.
-Or paste into PowerShell:
+**Easy install:** download **[targem.msi](https://github.com/GbaGuy/targem/releases/latest/download/targem.msi)** and
+double-click it. Everything is inside (Tesseract and the offline Hebrew model too), nothing else to install.
+Remove it from Settings → Apps.
+
+**Or, with the script:** download this repo (green *Code* button → *Download ZIP*), unzip, double-click
+**`install.bat`**, or paste into PowerShell:
 
 ```powershell
 irm https://raw.githubusercontent.com/GbaGuy/targem/main/install.ps1 | iex
 ```
 
-The installer sets up Python and Tesseract OCR (via winget), targem, and the offline Hebrew model, then
+The script sets up Python and Tesseract OCR (via winget), targem, and the offline Hebrew model, then
 adds a targem icon to the desktop and Start Menu. To remove it: `install.bat -Uninstall`.
 
 Hotkeys work in-game:
@@ -247,7 +248,8 @@ sentences.)
 python3 test_targem.py
 ```
 
-CI also runs the Windows UI, the offline model and an installer parse check on a real Windows machine.
+CI also runs the Windows UI, the offline model and an installer parse check on a real Windows machine,
+and builds and test-installs `targem.msi`. Push a `vX.Y` tag to publish it as a release.
 
 ## License
 
